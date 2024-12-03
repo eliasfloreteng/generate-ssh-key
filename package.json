@@ -1,0 +1,24 @@
+{
+  "name": "generate-ssh-key",
+  "version": "1.0.0",
+  "description": "Simple cross-platform SSH ED25519 key generator",
+  "main": "index.js",
+  "bin": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ssh",
+    "key",
+    "generator",
+    "ed25519",
+    "cross-platform"
+  ],
+  "author": "Elias Floreteng",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "which": "^3.0.1"
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "generate-ssh-key",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple cross-platform SSH ED25519 key generator",
   "main": "index.js",
   "bin": {

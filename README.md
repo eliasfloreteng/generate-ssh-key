@@ -1,4 +1,9 @@
 # SSH Key Generator
+
+[![npm version](https://img.shields.io/npm/v/elias123tre/generate-ssh-key.svg)](https://www.npmjs.com/package/elias123tre/generate-ssh-key)
+[![npm downloads](https://img.shields.io/npm/dm/elias123tre/generate-ssh-key.svg)](https://www.npmjs.com/package/elias123tre/generate-ssh-key)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Generate a secure ssh key with one command
 
 ## Features

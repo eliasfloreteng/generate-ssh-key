@@ -16,6 +16,7 @@
     "cross-platform"
   ],
   "author": "Elias Floreteng",
+  "repository": "github:elias123tre/generate-ssh-key",
   "license": "MIT",
   "dependencies": {
     "chalk": "^5.3.0",

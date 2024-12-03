@@ -19,7 +19,7 @@
   ],
   "author": "Elias Floreteng",
   "repository": {
-    "url": "git+https://github.com/elias123tre/generate-ssh-key.git"
+    "url": "git+https://github.com/eliasfloreteng/generate-ssh-key.git"
   },
   "license": "MIT",
   "dependencies": {

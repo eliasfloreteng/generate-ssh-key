@@ -146,6 +146,8 @@ async function generateKey() {
     console.log(chalk.white("   https://github.com/settings/ssh/new"))
     console.log(chalk.white("2. Or add it to your GitLab account:"))
     console.log(chalk.white("   https://gitlab.com/-/profile/keys"))
+    console.log(chalk.white("3. Or add it to your GitHub Enterprise account:"))
+    console.log(chalk.white("   https://gits-15.sys.kth.se/settings/ssh/new"))
 
     console.log(chalk.cyan("\nImportant:"))
     console.log(chalk.white("• For new clones, use SSH URLs instead of HTTPS:"))

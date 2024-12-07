@@ -13,6 +13,7 @@ Generate a secure ssh key with one command
 - 📋 Automatically copies public key to clipboard
 - 🛠️ Automatically installs OpenSSH on Windows if needed
 - 🔒 Sets correct permissions on .ssh directory
+- 🔄 Automatically converts repository URLs to SSH format
 - 💡 Provides helpful next steps
 
 ## Usage

@@ -256,8 +256,26 @@ async function main() {
             )
             console.log(chalk.white(`New URL: ${sshUrl}`))
           }
+        } else {
+          console.log(
+            chalk.yellow(
+              "\nNote: Current remote URL is not a GitHub/Bitbucket HTTPS URL. Skipping conversion."
+            )
+          )
         }
+      } else {
+        console.log(
+          chalk.green(
+            "\nNote: Current remote URL is already an SSH URL. Skipping conversion."
+          )
+        )
       }
+    } else {
+      console.log(
+        chalk.yellow(
+          "\nNote: Current directory is not a Git repository. Skipping URL conversion."
+        )
+      )
     }
   } catch (error) {
     console.error(chalk.red("\n❌ Error:"), error.message)

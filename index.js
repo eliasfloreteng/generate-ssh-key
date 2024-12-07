@@ -6,6 +6,7 @@ import { homedir, platform } from "os"
 import { join } from "path"
 import chalk from "chalk"
 import which from "which"
+import inquirer from "inquirer"
 
 const isWindows = platform() === "win32"
 const sshDir = join(homedir(), ".ssh")
@@ -166,6 +167,31 @@ async function generateKey() {
   }
 }
 
+async function isGitRepo() {
+  try {
+    await execPromise("git rev-parse --is-inside-work-tree")
+    return true
+  } catch {
+    return false
+  }
+}
+
+async function getCurrentRemoteUrl() {
+  try {
+    return await execPromise("git config --get remote.origin.url")
+  } catch {
+    return null
+  }
+}
+
+function convertToSshUrl(httpsUrl) {
+  const regex = /^https:\/\/(.*?)\/(.*?)\/(.*?)(?:\.git)?$/
+  const match = httpsUrl.match(regex)
+  if (!match) return null
+  const [, domain, username, repo] = match
+  return `git@${domain}:${username}/${repo}.git`
+}
+
 // Main execution
 async function main() {
   try {
@@ -203,6 +229,34 @@ async function main() {
 
     await ensureSSHDirectory()
     await generateKey()
+
+    // Add repository URL conversion
+    if (await isGitRepo()) {
+      const currentUrl = await getCurrentRemoteUrl()
+      if (currentUrl && !currentUrl.startsWith("git@")) {
+        const sshUrl = convertToSshUrl(currentUrl)
+        if (sshUrl) {
+          const { convert } = await inquirer.prompt([
+            {
+              type: "confirm",
+              name: "convert",
+              message: "Convert current repository's remote URL to SSH?",
+              default: true,
+            },
+          ])
+
+          if (convert) {
+            await execPromise(`git remote set-url origin ${sshUrl}`)
+            console.log(
+              chalk.green(
+                "\nRepository remote URL converted to SSH successfully!"
+              )
+            )
+            console.log(chalk.white(`New URL: ${sshUrl}`))
+          }
+        }
+      }
+    }
   } catch (error) {
     console.error(chalk.red("\n❌ Error:"), error.message)
     process.exit(1)

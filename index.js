@@ -140,31 +140,32 @@ async function generateKey() {
         chalk.yellow("\nNote: Could not copy to clipboard automatically")
       )
     }
-
-    // Show helpful next steps
-    console.log(chalk.cyan("\nNext steps:"))
-    console.log(chalk.white("1. Add this public key to your GitHub account:"))
-    console.log(chalk.white("   https://github.com/settings/ssh/new"))
-    console.log(chalk.white("2. Or add it to your GitLab account:"))
-    console.log(chalk.white("   https://gitlab.com/-/profile/keys"))
-    console.log(chalk.white("3. Or add it to your GitHub Enterprise account:"))
-    console.log(chalk.white("   https://gits-15.sys.kth.se/settings/ssh/new"))
-
-    console.log(chalk.cyan("\nImportant:"))
-    console.log(chalk.white("• For new clones, use SSH URLs instead of HTTPS:"))
-    console.log(chalk.white("  git clone git@github.com:username/repo.git"))
-    console.log(chalk.white("\n• To update existing repositories to use SSH:"))
-    console.log(chalk.white("  1. Check current remote URL:"))
-    console.log(chalk.white("     git remote -v"))
-    console.log(chalk.white("  2. Change remote URL to SSH:"))
-    console.log(
-      chalk.white(
-        "     git remote set-url origin git@github.com:username/repo.git"
-      )
-    )
   } catch (error) {
     throw new Error(`Failed to generate SSH key: ${error.message}`)
   }
+}
+
+function showNextSteps() {
+  console.log(chalk.cyan("\nNext steps:"))
+  console.log(chalk.white("1. Add this public key to your GitHub account:"))
+  console.log(chalk.white("   https://github.com/settings/ssh/new"))
+  console.log(chalk.white("2. Or add it to your GitLab account:"))
+  console.log(chalk.white("   https://gitlab.com/-/profile/keys"))
+  console.log(chalk.white("3. Or add it to your GitHub Enterprise account:"))
+  console.log(chalk.white("   https://gits-15.sys.kth.se/settings/ssh/new"))
+
+  console.log(chalk.cyan("\nImportant:"))
+  console.log(chalk.white("• For new clones, use SSH URLs instead of HTTPS:"))
+  console.log(chalk.white("  git clone git@github.com:username/repo.git"))
+  console.log(chalk.white("\n• To update existing repositories to use SSH:"))
+  console.log(chalk.white("  1. Check current remote URL:"))
+  console.log(chalk.white("     git remote -v"))
+  console.log(chalk.white("  2. Change remote URL to SSH:"))
+  console.log(
+    chalk.white(
+      "     git remote set-url origin git@github.com:username/repo.git"
+    )
+  )
 }
 
 async function isGitRepo() {
@@ -229,6 +230,7 @@ async function main() {
 
     await ensureSSHDirectory()
     await generateKey()
+    showNextSteps()
 
     // Add repository URL conversion
     if (await isGitRepo()) {

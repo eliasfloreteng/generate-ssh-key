@@ -146,6 +146,19 @@ async function generateKey() {
     console.log(chalk.white("   https://github.com/settings/ssh/new"))
     console.log(chalk.white("2. Or add it to your GitLab account:"))
     console.log(chalk.white("   https://gitlab.com/-/profile/keys"))
+
+    console.log(chalk.cyan("\nImportant:"))
+    console.log(chalk.white("• For new clones, use SSH URLs instead of HTTPS:"))
+    console.log(chalk.white("  git clone git@github.com:username/repo.git"))
+    console.log(chalk.white("\n• To update existing repositories to use SSH:"))
+    console.log(chalk.white("  1. Check current remote URL:"))
+    console.log(chalk.white("     git remote -v"))
+    console.log(chalk.white("  2. Change remote URL to SSH:"))
+    console.log(
+      chalk.white(
+        "     git remote set-url origin git@github.com:username/repo.git"
+      )
+    )
   } catch (error) {
     throw new Error(`Failed to generate SSH key: ${error.message}`)
   }

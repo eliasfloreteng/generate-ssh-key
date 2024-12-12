@@ -193,6 +193,44 @@ function convertToSshUrl(httpsUrl) {
   return `git@${domain}:${username}/${repo}.git`
 }
 
+async function isGitHubCliAvailable() {
+  try {
+    await which("gh")
+    // Check if authenticated
+    await execPromise("gh auth status")
+    return true
+  } catch {
+    return false
+  }
+}
+
+async function uploadKeyToGitHub(pubKeyPath) {
+  try {
+    const keyTitle = `SSH key generated on ${
+      new Date().toISOString().split("T")[0]
+    }`
+    await execPromise(`gh ssh-key add "${pubKeyPath}" -t "${keyTitle}"`)
+    console.log(
+      chalk.green("\nSSH key automatically added to your GitHub account!")
+    )
+    return true
+  } catch (error) {
+    console.log(
+      chalk.yellow("\nFailed to automatically add key to GitHub:"),
+      error.message
+    )
+    return false
+  }
+}
+
+async function getGitHubUsername() {
+  try {
+    return await execPromise("gh api user -q .login")
+  } catch {
+    return null
+  }
+}
+
 // Main execution
 async function main() {
   try {
@@ -230,6 +268,27 @@ async function main() {
 
     await ensureSSHDirectory()
     await generateKey()
+
+    // Try to upload to GitHub if CLI is available
+    const hasGitHubCli = await isGitHubCliAvailable()
+    if (hasGitHubCli) {
+      const username = await getGitHubUsername()
+      const accountInfo = username ? ` (@${username})` : ""
+
+      const { upload } = await inquirer.prompt([
+        {
+          type: "confirm",
+          name: "upload",
+          message: `Would you like to automatically add this SSH key to your GitHub account${accountInfo}?`,
+          default: true,
+        },
+      ])
+
+      if (upload) {
+        await uploadKeyToGitHub(pubKeyPath)
+      }
+    }
+
     showNextSteps()
 
     // Add repository URL conversion
@@ -273,7 +332,7 @@ async function main() {
     } else {
       console.log(
         chalk.yellow(
-          "\nNote: Current directory is not a Git repository. Skipping URL conversion."
+          "\nTip: To convert a repository's URL to SSH, run this command inside a Git repository"
         )
       )
     }

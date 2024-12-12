@@ -14,6 +14,7 @@ Generate a secure ssh key with one command
 - 🛠️ Automatically installs OpenSSH on Windows if needed
 - 🔒 Sets correct permissions on .ssh directory
 - 🔄 Automatically converts repository URLs to SSH format
+- 🚀 Automatically uploads key to GitHub if GitHub CLI is installed
 - 💡 Provides helpful next steps
 
 ## Usage

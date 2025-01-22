@@ -231,10 +231,84 @@ async function getGitHubUsername() {
   }
 }
 
+async function checkGitInstalled() {
+  try {
+    await which("git")
+    return true
+  } catch {
+    return false
+  }
+}
+
+async function getGitConfig(key) {
+  try {
+    return await execPromise(`git config --global --get ${key}`)
+  } catch {
+    return null
+  }
+}
+
+async function setGitConfig(key, value) {
+  await execPromise(`git config --global ${key} "${value}"`)
+}
+
+async function setupGitConfig() {
+  const name = await getGitConfig("user.name")
+  const email = await getGitConfig("user.email")
+
+  if (!name || !email) {
+    console.log(chalk.yellow("\nGit user configuration is incomplete."))
+    const answers = await inquirer.prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "Enter your full name for Git:",
+        default: name || "",
+        when: !name,
+      },
+      {
+        type: "input",
+        name: "email",
+        message: "Enter your email for Git:",
+        default: email || "",
+        when: !email,
+      },
+    ])
+
+    if (answers.name) {
+      await setGitConfig("user.name", answers.name)
+      console.log(chalk.green("Git name configured successfully!"))
+    }
+    if (answers.email) {
+      await setGitConfig("user.email", answers.email)
+      console.log(chalk.green("Git email configured successfully!"))
+    }
+  }
+}
+
 // Main execution
 async function main() {
   try {
     console.log(chalk.cyan("🔑 SSH Key Generator"))
+
+    // Check if Git is installed
+    if (!(await checkGitInstalled())) {
+      console.error(chalk.red("Error: Git is not installed!"))
+      console.log(chalk.yellow("Please install Git:"))
+      if (isWindows) {
+        console.log(
+          chalk.white("Download from: https://git-scm.com/download/win")
+        )
+      } else if (platform() === "darwin") {
+        console.log(chalk.white("Run: brew install git"))
+      } else {
+        console.log(chalk.white("Run: sudo apt-get install git"))
+      }
+      process.exit(1)
+    }
+
+    // Setup Git configuration if needed
+    await setupGitConfig()
 
     // Check if ssh-keygen is available
     if (!(await checkSSHKeygen())) {
